@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        /* Custom style for the image */
+        .custom-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover; /* Ensures the image covers the entire container */
+        }
+    </style>
+</head>
+<body>
+    <!-- Picture Above Navbar -->
+    <div class="container-fluid p-0 h-25">
+        <img src="https://media.cntraveler.com/photos/5eb18e42fc043ed5d9779733/master/pass/BlackForest-Germany-GettyImages-147180370.jpg" alt="Forum Image" class="custom-image">
+    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <!-- Navbar Brand (Logo or Name) -->
+            <a class="navbar-brand" href="#">
+                <img src="https://i.pinimg.com/originals/09/d3/18/09d318ee250c1c5bd3bc31ae7e4ed1d1.png" alt="Forum Logo" height="30" class="d-inline-block align-top">
+                BagChasers
+            </a>
+
+            <!-- Navbar Toggle Button for Mobile -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!-- Placeholder Navbar Elements -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Element 1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Element 2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Element 3</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Element 4</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Element 5</a>
+                    </li>
+                </ul>
+
+                <!-- Log Out Button (Top Right) -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Goes Here -->
+
+    <!-- Bootstrap JS dependencies -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
