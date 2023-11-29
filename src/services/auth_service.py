@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from ..repositories.app_user_repository import AppUserRepository
 import re
-from ..models import AppUser
+#from ..models import AppUser uncomment once this import error is fixed
 from security import bcrypt
 
 class RegistrationService:

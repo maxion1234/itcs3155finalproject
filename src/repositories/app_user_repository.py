@@ -1,4 +1,4 @@
-from ..models import AppUser
+#from ..models import AppUser uncomment once this import error is fixed
 from extensions import db
 
 class AppUserRepository:
