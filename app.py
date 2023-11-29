@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+
 from flask_sqlalchemy import SQLAlchemy
 from src.blueprints.auth import auth_bp
 from extensions import db
