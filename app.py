@@ -23,8 +23,6 @@ migrate = Migrate(app, db)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-#TO DO - deal with routes - might only need the one for index.html in this file
-
 @app.route('/')
 def index():
     return render_template('index.html')

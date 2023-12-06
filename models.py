@@ -34,8 +34,6 @@ class Reply(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # Assuming you have a User model
     author = db.relationship('User', backref='replies')
     post = db.relationship('Post', backref='replies')
     
