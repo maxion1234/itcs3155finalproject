@@ -10,3 +10,7 @@ To deactivate your virtual enviroment, run
 deactivate
 If you install new packages, you can add them to the requirements.txt by running
 pip freeze > requirements.txt
+
+Once you have a linked db, you can run "flask db init" to initalize it.
+In order to set up the databases, run "flask db migrate -m "Prep Database"
+then "flask db upgrade". (Or do it yourself)

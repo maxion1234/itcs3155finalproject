@@ -9,7 +9,7 @@ from forms import PostForm
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Charlotte43@localhost:3306/flask'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:[REDACTED]@localhost:3306/flask'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a secure secret key
 login_manager = LoginManager(app)
