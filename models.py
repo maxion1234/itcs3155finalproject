@@ -34,6 +34,8 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
     likes = db.Column(db.Integer, default=0)
+    category = db.Column(db.String(50), nullable=False) 
+
 
     author = db.relationship('User', backref=db.backref('posts', lazy=True))
 

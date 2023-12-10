@@ -29,7 +29,8 @@ Only the author can update a post.
 {% endblock %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Forum Posts</h2>
+    {% set category_title = category_name if category_name else 'All Posts' %}
+    <h2>{{ category_title }}</h2>
     {% if current_user.is_authenticated %}
     <a href="{{ url_for('create_post') }}"><button>Create New Post</button></a>
     {% endif %}

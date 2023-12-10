@@ -9,10 +9,21 @@ representing the main content of the post. Validators are applied to ensure that
 This form helps maintain a consistent structure for handling post-related data input on the website.
 """
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField
+from wtforms import StringField, TextAreaField, SelectField
 from wtforms.validators import DataRequired
 
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+    category = SelectField('Category', choices=[
+        ('Pet Care Tips', 'Pet Care Tips'),
+        ('Adoption Stories', 'Adoption Stories'),
+        ('Veterinary Advice', 'Veterinary Advice'),
+        ('Pet Behavior', 'Pet Behavior'),
+        ('Wildlife Conservation', 'Wildlife Conservation'),
+        ('Lost and Found', 'Lost and Found'),
+        ('Animal-friendly Travel', 'Animal-friendly Travel'),
+        ('Pet Product Reviews', 'Pet Product Reviews'),
+        ('Local Animal Events', 'Local Animal Events'),
+    ], validators=[DataRequired()])
 # Contains the text-area-field used when posting or replying

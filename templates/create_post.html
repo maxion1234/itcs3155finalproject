@@ -20,6 +20,10 @@ The form allows users to input the post title and content, submitting the form t
         {{ form.content.label(class="form-label") }}
         {{ form.content(class="form-control") }}
       </div>
+      <div class="form-group">
+        <label for="category" class="form-label">Category</label>
+        {{ form.category(class="form-control", required=true) }}
+    </div>
       <button type="submit" class="btn btn-primary">Create Post</button>
     </form>
   </div>

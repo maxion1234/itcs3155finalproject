@@ -33,7 +33,7 @@ from forms import PostForm
 
 app = Flask(__name__)
 # Configure the SQLAlchemy database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Charlotte43@localhost:3306/flask'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:[REDACTED]@localhost:3306/flask'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a secure secret key
 
@@ -114,9 +114,15 @@ def forum():
 # Define the route for displaying all posts
 @app.route('/posts')
 def posts():
-    # Fetch posts data from the database
-    posts = Post.query.all()
-    return render_template('posts.html', posts=posts)
+    # Fetch the category from the request parameters
+    category = request.args.get('category')
+    # If a category is specified, filter posts by that category
+    if category:
+        posts = Post.query.filter_by(category=category).all()
+    else:
+        # Otherwise, fetch all posts
+        posts = Post.query.all()
+    return render_template('posts.html', posts=posts, category_name=category)
 
 # Define the route for creating a new post
 @app.route('/create_post', methods=['GET', 'POST'])
@@ -128,13 +134,22 @@ def create_post():
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
+        category = form.category.data
 
+        predefined_categories = ['Pet Care Tips', 'Adoption Stories', 'Veterinary Advice', 'Pet Behavior',
+                                 'Wildlife Conservation', 'Lost and Found', 'Animal-friendly Travel',
+                                 'Pet Product Reviews', 'Local Animal Events']
+        
+        if category not in predefined_categories:
+            flash('Invalid category selected.', 'danger')
+            return redirect(url_for('create_post'))
+        
         # Create a new post and add it to the database
-        new_post = Post(title=title, content=content, author=current_user)
+        new_post = Post(title=title, content=content, author=current_user, category=category)
         db.session.add(new_post)
         db.session.commit()
 
-        return redirect(url_for('posts'))
+        return redirect(url_for('posts', category=category))
 
     return render_template('create_post.html', form=form)
 
@@ -249,6 +264,34 @@ def about_us():
 def user_list():
     users = User.query.all()
     return render_template('user_list.html', users=users)
+
+@app.route('/categories')
+def categories():
+    predefined_categories = [
+        'Pet Care Tips', 'Adoption Stories', 'Veterinary Advice', 'Pet Behavior',
+        'Wildlife Conservation', 'Lost and Found', 'Animal-friendly Travel',
+        'Pet Product Reviews', 'Local Animal Events'
+    ]
+
+    categories_info = [{'name': category, 'description': get_category_description(category)} for category in predefined_categories]
+
+    return render_template('categories.html', categories=categories_info)
+
+# Add a function to get category descriptions (modify it based on your preference)
+def get_category_description(category):
+    descriptions = {
+        'Pet Care Tips': 'Discussions and tips on general pet care, grooming, and health.',
+        'Adoption Stories': 'Heartwarming stories about pet adoptions and rescues.',
+        'Veterinary Advice': 'Q&A and discussions about veterinary care, illnesses, and treatments.',
+        'Pet Behavior': 'Tips and discussions on understanding and training pets.',
+        'Wildlife Conservation': 'Discussions about global wildlife conservation efforts.',
+        'Lost and Found': 'Help reunite lost pets with their owners.',
+        'Animal-friendly Travel': 'Tips and recommendations for traveling with pets.',
+        'Pet Product Reviews': 'Reviews and recommendations for pet-related products.',
+        'Local Animal Events': 'Announcements and discussions about local animal-related events.'
+    }
+
+    return descriptions.get(category, 'No description available')  # Return a default if not found
 
 # Run the Flask app
 if __name__ == '__main__':
