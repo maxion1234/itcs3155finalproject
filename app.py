@@ -1,3 +1,27 @@
+"""
+This script serves as the main entry point for the Flask application. It defines the web routes,
+handles user authentication, and interacts with the database models using Flask-SQLAlchemy.
+The application includes features such as user registration, login, logout, post creation, viewing posts,
+updating posts, deleting posts, liking posts, and more.
+
+Routes:
+- /: Homepage route.
+- /register: User registration route.
+- /login: User login route.
+- /logout: User logout route.
+- /forum: Forum main page route.
+- /posts: Route for displaying all forum posts.
+- /create_post: Route for creating a new post.
+- /view_post/<int:post_id>: Route for viewing a specific post.
+- /update_post/<int:post_id>: Route for updating a post.
+- /delete_post/<int:post_id>: Route for deleting a post.
+- /like_post/<int:post_id>: Route for liking a post.
+- /about_us: Route for the "About Us" page.
+- /user_list: Route for displaying a list of registered users.
+
+Additionally, it configures the Flask application, sets up user authentication using Flask-Login,
+and defines the SQLAlchemy models for User, Post, and Reply.
+"""
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
@@ -8,27 +32,33 @@ from flask_wtf import FlaskForm
 from forms import PostForm
 
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:[REDACTED]@localhost:3306/flask'
+# Configure the SQLAlchemy database connection
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Charlotte43@localhost:3306/flask'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a secure secret key
+
+# Initialize Flask-Login for managing user sessions
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+
+# Initialize Flask-SQLAlchemy and Flask-Migrate for database operations
 db.init_app(app)
 migrate = Migrate(app, db)
 
-
-
+# Define a user loader function for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Define the route for the home page
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# Define the route for user registration
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    # Process registration form submission
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -37,7 +67,7 @@ def register():
         if User.query.filter_by(username=username).first():
             flash('Username already taken. Please choose another.', 'danger')
             return redirect(url_for('register'))
-
+        # Create a new user and add to the database
         new_user = User(username=username, password=password)
         db.session.add(new_user)
         db.session.commit()
@@ -47,14 +77,18 @@ def register():
 
     return render_template('register.html')
 
+# Define the route for user login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Process login form submission
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
+        # Query the database for the user
         user = User.query.filter_by(username=username).first()
 
+        # Check if the provided credentials are valid
         if user and user.password == password:
             login_user(user)
             flash('Login successful!', 'success')
@@ -64,32 +98,38 @@ def login():
 
     return render_template('index.html')
 
+# Define the route for user logout
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'info')
+    flash('You have been logged out.', 'success')
     return redirect(url_for('index'))
 
+# Define the route for the main forum page
 @app.route('/forum')
 def forum():
     return render_template('forum.html')
 
+# Define the route for displaying all posts
 @app.route('/posts')
 def posts():
     # Fetch posts data from the database
     posts = Post.query.all()
     return render_template('posts.html', posts=posts)
 
+# Define the route for creating a new post
 @app.route('/create_post', methods=['GET', 'POST'])
 @login_required
 def create_post():
     form = PostForm()
 
+    # Process the form submission for creating a new post
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
 
+        # Create a new post and add it to the database
         new_post = Post(title=title, content=content, author=current_user)
         db.session.add(new_post)
         db.session.commit()
@@ -98,18 +138,19 @@ def create_post():
 
     return render_template('create_post.html', form=form)
 
+# Define the route for viewing a specific post
 @app.route('/view_post/<int:post_id>', methods=['GET', 'POST'])
 def view_post(post_id):
     # Retrieve the post with the given post_id from the database
     post = Post.query.get_or_404(post_id)
 
+    # Increment post views if the current user is not the author
     if current_user != post.author:
         post.views += 1
         db.session.commit()
     
-    # If the request is a POST (i.e., user is submitting a reply)
+    # Process the form submission for adding a reply to the post
     if request.method == 'POST':
-        # Assuming you have a Reply model
         reply_content = request.form.get('reply_content')
         new_reply = Reply(content=reply_content, author=current_user, post=post)
         db.session.add(new_reply)
@@ -121,6 +162,7 @@ def view_post(post_id):
     # Render the view_post.html template with the post and its replies
     return render_template('view_post.html', post=post)
 
+# Define the route for updating a post
 @app.route('/update_post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
@@ -133,6 +175,7 @@ def update_post(post_id):
 
     form = PostForm(obj=post)
 
+    # Process the form submission for updating a post
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
@@ -143,6 +186,7 @@ def update_post(post_id):
 
     return render_template('update_post.html', form=form, post=post)
 
+# Define the route for deleting a post
 @app.route('/delete_post/<int:post_id>', methods=['POST'])
 @login_required
 def delete_post(post_id):
@@ -166,6 +210,7 @@ def delete_post(post_id):
 
     return redirect(url_for('posts'))
 
+# Define the route for liking a post
 @app.route('/like_post/<int:post_id>', methods=['POST'])
 @login_required
 def like_post(post_id):
@@ -193,5 +238,18 @@ def like_post(post_id):
             flash('You have already liked this post.', 'info')
 
     return redirect(url_for('view_post', post_id=post_id))
+
+# Define the route for the "About Us" page
+@app.route('/about_us')
+def about_us():
+    return render_template('about_us.html')
+
+# Define the route for displaying a list of all registered users
+@app.route('/user_list')
+def user_list():
+    users = User.query.all()
+    return render_template('user_list.html', users=users)
+
+# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)

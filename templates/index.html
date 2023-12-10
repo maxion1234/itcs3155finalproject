@@ -1,3 +1,12 @@
+<!--
+This HTML file serves as the template for the login page. It provides the structure and styling
+for the login form, including input fields for the username and password. It also displays
+flash messages for notifications about login status, such as successful logins or invalid credentials.
+
+The page includes links to the Bootstrap CSS and JavaScript libraries for styling and interactive
+components. The form allows users to input their credentials and submit the form for login. Users
+can also navigate to the registration page if they are not yet registered.
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,12 +33,15 @@
             color: #fff;
         }
 
-        ul.flashes li.error {
+        ul.flashes li.danger {
             background-color: #d9534f;
             color: #fff;
         }
 
-        /* Add more styles for other message types as needed */
+        ul.flashes li.info {
+            background-color: rgb(255, 255, 255);
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -64,7 +76,6 @@
         </div>
 
         <!-- Submit button -->
-        <!-- TODO: Make this back into a button. Temporarily made this an anchor for href capability/testing-->
         <button type="submit" class="btn btn-primary btn-block w-50 mx-auto">Sign in</button>
 
         <!-- Register buttons -->

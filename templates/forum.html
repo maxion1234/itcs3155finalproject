@@ -1,7 +1,13 @@
+<!--
+This HTML file serves as the template other pages.
+It includes the log-out button, navbar, and CSS styles used elsewhere.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    {% block head %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
@@ -15,10 +21,46 @@
             object-fit: cover;
             /* Ensures the image covers the entire container */
         }
+
+        ul.flashes {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.flashes li {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        ul.flashes li.success {
+            background-color: #5cb85c;
+            color: #fff;
+        }
+
+        ul.flashes li.danger {
+            background-color: #d9534f;
+            color: #fff;
+        }
+
+        ul.flashes li.info {
+            background-color: rgb(255, 255, 255);
+            color: #fff;
+        }
     </style>
+    {% endblock %}
 </head>
 
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <!-- Picture Above Navbar -->
     <div class="container-fluid p-0 h-25">
         <img src="https://media.cntraveler.com/photos/5eb18e42fc043ed5d9779733/master/pass/BlackForest-Germany-GettyImages-147180370.jpg"
@@ -48,10 +90,10 @@
                         <a class="nav-link" href="{{ url_for('posts') }}">View Forum Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Element 2</a>
+                        <a class="nav-link" href="{{ url_for('about_us') }}">About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Element 3</a>
+                        <a class="nav-link" href="{{ url_for('user_list') }}">User List</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Element 4</a>
@@ -65,9 +107,13 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         {% if current_user.is_authenticated %}
-                        <p>Hello, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+                            <p>Hello, {{ current_user.username }}! 
+                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm">Logout</a>
+                            </p>
                         {% else %}
-                        <p>You are not logged in.<a href="{{ url_for('index') }}">Login</a></p>
+                            <p>You are not logged in. 
+                                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm">Login</a>
+                            </p>
                         {% endif %}
                     </li>
                 </ul>

@@ -1,17 +1,28 @@
+<!--
+This HTML file serves as the template for the page where authenticated users can update the details of an
+existing forum post. It provides the structure and styling for the post update form, pre-populated with the
+current post details.
+
+The form allows users to modify the post title and content, submitting the form to update the selected post in the forum.
+-->
+
+
 {% extends 'forum.html' %}
 
 {% block content %}
-  <h2>Update Post</h2>
-  <form method="post">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.title.label(class="form-control-label") }}
-      {{ form.title(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.content.label(class="form-control-label") }}
-      {{ form.content(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary">Update Post</button>
-  </form>
+<div class="container">
+<h2>Update Post</h2>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+    {{ form.title.label(class="form-control-label") }}
+    {{ form.title(class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ form.content.label(class="form-control-label") }}
+    {{ form.content(class="form-control") }}
+  </div>
+  <button type="submit" class="btn btn-primary">Update Post</button>
+</form>
+</div>
 {% endblock %}

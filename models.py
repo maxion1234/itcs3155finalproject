@@ -1,3 +1,15 @@
+"""
+This module defines the database models for the Flask application. It utilizes Flask-SQLAlchemy
+to create User, Post, and Reply models that represent the structure of the application's database.
+These models include relationships between users, posts, and likes.
+Classes:
+- User: Represents a registered user with associated posts and likes.
+- Post: Represents a forum post with an author, title, content, and associated replies.
+- Reply: Represents a reply to a post with an author, content, and timestamp.
+Table:
+- likes: A many-to-many association table to store the likes relationship between users and posts.
+"""
+
 from flask_login import UserMixin
 from extensions import db
 from datetime import datetime

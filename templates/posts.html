@@ -1,5 +1,32 @@
-{% extends 'forum.html' %}
 
+<!--
+This HTML file serves as the template for displaying a list of forum posts. It is used to render the posts in a
+compact format, showing post titles, authors, views, and likes. Users can click on posts to view more details.
+
+The list of posts is fetchedfrom the database and displayed on the page.
+Any user can view posts, however only those with accounts can make them.
+Only the author can update a post.
+-->
+
+
+{% extends 'forum.html' %}
+{% block head %}
+{{ super() }}
+<style>
+    .views-likes-container {
+    display: flex;
+    justify-content: flex-end; /* Align the boxes to the right */
+    margin-bottom: 10px; /* Add some spacing between the content and views/likes */
+}
+
+.views-box,
+.likes-box {
+    background-color: #eee; /* Adjust the background color as needed */
+    padding: 5px;
+    margin-left: 10px; /* Add some spacing between views and likes boxes */
+}
+</style>
+{% endblock %}
 {% block content %}
 <div class="container mt-5">
     <h2>Forum Posts</h2>
@@ -11,13 +38,18 @@
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-text">Author: {{ post.author.username }}</p>
-            <p class="card-text">Views: {{ post.views }}</p>
-            <p class="card-text">Likes: {{ post.likes }}</p>
-            <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary">View Post</a>
-            {% if current_user.is_authenticated and current_user == post.author %}
-            <a href="{{ url_for('update_post', post_id=post.id) }}" class="btn btn-warning">Update Post</a>
-            {% endif %}
+            <div class="views-likes-container">
+                <div class="views-box">
+                    <p class="card-text">Views: {{ post.views }}</p>
+                </div>
+                <div class="likes-box">
+                    <p class="card-text">Likes: {{ post.likes }}</p>
+                </div>
         </div>
+        <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary">View Post</a>
+        {% if current_user.is_authenticated and current_user == post.author %}
+        <a href="{{ url_for('update_post', post_id=post.id) }}" class="btn btn-warning">Update Post</a>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
