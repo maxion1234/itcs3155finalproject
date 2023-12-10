@@ -1,6 +1,13 @@
 <!--
 This HTML file serves as the template other pages.
 It includes the log-out button, navbar, and CSS styles used elsewhere.
+
+At the bottom, it uses javascript to generate a randomized header image. 
+This image of nature varies depending on time of day
+If you view in the morning, you'll have sun.
+At night, stars in the sky.
+Afternoons are generic naturey- photos.
+Provided via UnSplash's search API
 -->
 
 <!DOCTYPE html>
@@ -63,8 +70,8 @@ It includes the log-out button, navbar, and CSS styles used elsewhere.
     {% endwith %}
     <!-- Picture Above Navbar -->
     <div class="container-fluid p-0 h-25">
-        <img src="https://media.cntraveler.com/photos/5eb18e42fc043ed5d9779733/master/pass/BlackForest-Germany-GettyImages-147180370.jpg"
-            alt="Forum Image" class="custom-image">
+       <!-- For testing URLs <p id="ptest"></p>-->
+        <img id="headerImage" alt="Forum Image" class="custom-image">
     </div>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -107,13 +114,13 @@ It includes the log-out button, navbar, and CSS styles used elsewhere.
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         {% if current_user.is_authenticated %}
-                            <p>Hello, {{ current_user.username }}! 
-                                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm">Logout</a>
-                            </p>
+                        <p>Hello, {{ current_user.username }}!
+                            <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary btn-sm">Logout</a>
+                        </p>
                         {% else %}
-                            <p>You are not logged in. 
-                                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm">Login</a>
-                            </p>
+                        <p>You are not logged in.
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm">Login</a>
+                        </p>
                         {% endif %}
                     </li>
                 </ul>
@@ -135,6 +142,38 @@ It includes the log-out button, navbar, and CSS styles used elsewhere.
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script>
+        // Mapping of times of day to Unsplash image URLs
+        var timeOfDayImages = {
+            'morning': 'https://source.unsplash.com/1600x900/?nature,morning',
+            'afternoon': 'https://source.unsplash.com/1600x900/?nature,afternoon',
+            'evening': 'https://source.unsplash.com/1600x900/?nature,nighttime',
+        };
+
+        // Function to determine the time of day
+        function getTimeOfDay() {
+            var currentHour = new Date().getHours();
+            if (currentHour >= 6 && currentHour < 12) {
+                return 'morning';
+            } else if (currentHour >= 12 && currentHour < 18) {
+                return 'afternoon';
+            } else {
+                return 'evening';
+            }
+        }
+
+        // Function to update the header image based on the time of day
+        function updateHeaderImage() {
+            var timeOfDay = getTimeOfDay();
+            var headerImage = document.getElementById('headerImage');
+            headerImage.src = timeOfDayImages[timeOfDay];
+           // ptest.textContent = 'Image URL: ' + timeOfDayImages[timeOfDay]; testing stuff
+
+        }
+
+        // Update the header image when the page loads
+        window.onload = updateHeaderImage;
+    </script>
 </body>
 
 </html>
